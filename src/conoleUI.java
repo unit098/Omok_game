@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class conoleUI {
     InputStream in;
     PrintStream out;
+    omokGame game;
 
     public conoleUI(InputStream in, PrintStream out) {
         this.in = in;
@@ -16,7 +17,7 @@ public class conoleUI {
     public void run(){
         this.intro();
     }
-    public void intro(){
+    private void intro(){
         out.println("Welcome to my Omok game");
         gameselect();
     }
@@ -27,9 +28,11 @@ public class conoleUI {
         Scanner k = new Scanner(in);
         String g = k.next();
         if (g.equals("1")){
+            drawBoard(new board(sizeAsk(k)));
             out.println("ok");
         }
-        if (g.equals("2")){
+        else if (g.equals("2")){
+            sizeAsk(k);
             out.println("wow");
         }
         else{
@@ -37,9 +40,38 @@ public class conoleUI {
             gameselect();
         }
         k.close();
-        
-        
     }
     
+    private void drawBoard(board board) {
+        out.println("the board is");
+        char[][] field = board.field;
+        for( int i = 0; i<field.length; i++){
+            out.print("[  ");
+            for( int j = 0; j<field.length; j++){
+                out.print(field[i][j]+"  ");
+            }
+            out.println("]");
+        }
+    }
+
+
+    private int sizeAsk(Scanner k){
+        String g = k.next();
+        int j = 0;
+        try{j =Integer.parseInt(g);}
+        catch(Exception e){
+            out.println("input must be a whole number");
+            return sizeAsk(k);
+        }
+        
+        if (j<15){
+            out.println("size must be greater than 14");
+            return sizeAsk(k);
+        }
+        else {
+            return j;
+        }
+        
+    }
     
 }
