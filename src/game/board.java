@@ -1,3 +1,4 @@
+package game;
 
 import java.util.Arrays;
 /** stores the game board as a 2D array of strings handels win detection and highlighting winning row */

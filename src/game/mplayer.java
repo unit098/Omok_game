@@ -1,3 +1,4 @@
+package game;
 
 /** commands for machine player*/
 public class mplayer extends player {

@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"board"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"game","l":"App"},{"p":"game","l":"board"},{"p":"game","l":"conoleUI"},{"p":"game","l":"Controll"},{"p":"game","l":"hplayer"},{"p":"game","l":"mplayer"},{"p":"game","l":"omokGame"},{"p":"game","l":"player"}];updateSearchResults();

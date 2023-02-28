@@ -1,3 +1,4 @@
+package game;
 
 import java.lang.reflect.Array;
 /** abstract to reperesant both human and machine players */

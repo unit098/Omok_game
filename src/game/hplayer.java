@@ -1,3 +1,4 @@
+package game;
 
 /** commands for human player physically presant*/
 public class hplayer extends player {
