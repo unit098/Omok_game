@@ -19,11 +19,13 @@ public class Bordwidg extends javax.swing.JPanel{
         // TODO Auto-generated method stub
         super.paintComponent(g);
         Dimension d = getSize();
-        int size = field.getboard()[0].length+1;
+        int size =  field.getboard()[0].length+1;
         g.setColor(Color.lightGray);
         g.fillRect(0, 0, d.width, d.height);
         g.setColor(Color.gray);
         int linex = 0;
+        int distx = d.width/size+1;
+        int disty = d.height/size+1;
         for (int i=0; i<size; i++) {
             linex += d.width/size+1;
             g.fillRect(linex-2, 0, 4, d.height);
@@ -33,6 +35,14 @@ public class Bordwidg extends javax.swing.JPanel{
             liney += d.height/size+1;
             g.fillRect(0, liney-2, d.width, 4);
         }
+        for (int i = 0; i<size-1; i++){
+            for (int j = 0; j<size-1; j++){
+                if(field.getboard()[i][j] == "X"){
+                    g.setColor(Color.RED);
+                    g.fillOval(distx+(i*distx)-((d.width/(size))/2), disty+(j*disty)-((d.height/(size))/2), (d.width/(size)), (d.height/(size)));
+                }
+            }
+        }
     }
 }
     class test{
@@ -40,6 +50,7 @@ public class Bordwidg extends javax.swing.JPanel{
         board b = new board(20);
 
         public test(){
+            b.getboard()[5][5]="X";
             e.add(new Bordwidg(b));
             e.setVisible(true);
         }
