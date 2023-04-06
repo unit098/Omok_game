@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class board {
     int size;
     String[][] field;
+    public int[] blockneed = new int[] {0,0};
     
     public board(String[][] field){
         this.field = field;
@@ -23,6 +24,11 @@ public class board {
     
     /** detects if a placed piece creates a winning row */
     public boolean windetect(int[] lastPlaced){
+        boolean aic= false;
+        if(field[lastPlaced[0]][lastPlaced[1]]=="O"){
+            aic = true;
+        }
+        System.out.println(aic);
         int rowsize = 1;
         String[] cords = new String[5];
         int lookX = lastPlaced[0];
@@ -34,10 +40,56 @@ public class board {
             showwinn(cords);
             return true;
         }
+        if(aic && rowsize>=3){
+            String i = cords[0];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]-1][cord[1]]=="*"){
+                    cord[0] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[rowsize-1];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]+1][cord[1]]=="*"){
+                    cord[0] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
+        }
         rowsize = checkud(lookX, lookY, cords, rowsize, 0, -1, token);
         if (rowsize==5){
             showwinn(cords);
             return true;
+        }
+        if(aic && rowsize>=3){
+            String i = cords[0];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]+1][cord[1]]=="*"){
+                    cord[0] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[rowsize-1];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]-1][cord[1]]=="*"){
+                    cord[0] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
         }
         rowsize = 1;
         cords = new String[5];
@@ -47,10 +99,56 @@ public class board {
             showwinn(cords);
             return true;
         }
+        if(aic && rowsize>=3){
+            String i = cords[0];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]][cord[1]-1]=="*"){
+                    cord[1] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[rowsize-1];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]][cord[1]+1]=="*"){
+                    cord[1] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
+        }
         rowsize = checkud(lookX, lookY, cords, rowsize, 1, -1, token);
         if (rowsize==5){
             showwinn(cords);
             return true;
+        }
+        if(aic && rowsize>=3){
+            String i = cords[rowsize-1];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]][cord[1]-1]=="*"){
+                    cord[1] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[0];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]][cord[1]+1]=="*"){
+                    cord[1] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
         }
         rowsize = 1;
         cords = new String[5];
@@ -60,10 +158,61 @@ public class board {
             showwinn(cords);
             return true;
         }
+        if(aic && rowsize>=3){
+            String i = cords[0];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]-1][cord[1]-1]=="*"){
+                    cord[1] -= 1;
+                    cord[0] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[rowsize-1];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]+1][cord[1]+1]=="*"){
+                    cord[1] += 1;
+                    cord[0] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
+        }
         rowsize = checkdiag(lookX, lookY, cords, rowsize, -1, 1, token);
         if (rowsize==5){
             showwinn(cords);
             return true;
+        }
+        if(aic && rowsize>=3){
+            String i = cords[rowsize-1];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]-1][cord[1]-1]=="*"){
+                    cord[1] -= 1;
+                    cord[0] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[0];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]+1][cord[1]+1]=="*"){
+                    cord[1] += 1;
+                    cord[0] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
+
         }
         rowsize = 1;
         cords = new String[5];
@@ -73,10 +222,61 @@ public class board {
             showwinn(cords);
             return true;
         }
+        if(aic && rowsize>=3){
+            String i = cords[0];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]-1][cord[1]+1]=="*"){
+                    cord[1] += 1;
+                    cord[0] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[rowsize-1];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]+1][cord[1]-1]=="*"){
+                    cord[1] -= 1;
+                    cord[0] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
+        }
         rowsize = checkdiag(lookX, lookY, cords, rowsize, -1, -1, token);
         if (rowsize==5){
             showwinn(cords);
             return true;
+        }
+        if(aic && rowsize>=3){
+            String i = cords[rowsize-1];
+            String[] j=i.split(" ");
+            int[] cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]-1][cord[1]+1]=="*"){
+                    cord[1] += 1;
+                    cord[0] -= 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+            i = cords[0];
+            j=i.split(" ");
+            cord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
+            try {
+                if(field[cord[0]+1][cord[1]-1]=="*"){
+                    cord[1] -= 1;
+                    cord[0] += 1;
+                    blockneed = cord; 
+                }
+            } catch (Exception e) {
+            }
+
+
         }
         return false;
         

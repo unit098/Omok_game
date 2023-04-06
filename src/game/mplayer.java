@@ -19,6 +19,9 @@ public class mplayer extends player {
                 i = 0;
             }
         }
+        if(field.getboard()[field.blockneed[0]][field.blockneed[1]]=="*"){
+            return super.place(field.blockneed);
+        }
         int[] out = new int[]{i, j};
         return super.place(out);
     }

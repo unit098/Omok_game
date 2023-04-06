@@ -10,7 +10,7 @@ public class omokGame {
     int currentplayer;
     Random ran = new Random();
     board gamespace;
-    player[] players = new player[2];
+    public player[] players = new player[2];
 
     /** @param type - decides if game is vs ai or vs human 1: Ai, 2: human */
     public omokGame(int type, int size){
@@ -42,5 +42,8 @@ public class omokGame {
         return currentplayer;
     }
 
+    public board gamespace(){
+        return gamespace;
+    }
 
 }
