@@ -28,7 +28,6 @@ public class board {
         if(field[lastPlaced[0]][lastPlaced[1]]=="O"){
             aic = true;
         }
-        System.out.println(aic);
         int rowsize = 1;
         String[] cords = new String[5];
         int lookX = lastPlaced[0];
@@ -286,7 +285,6 @@ public class board {
     /** edits the values in the winning row to make the console print them highlighted */
     public void showwinn(String[] wincords){
         for(String i: wincords){
-            System.out.println(i);
             String[] j=i.split(" ");
                 int[] wincord = new int[]{Integer.parseInt(j[0]), Integer.parseInt(j[1])};
                 field[wincord[0]][wincord[1]] = "W" + field[wincord[0]][wincord[1]];

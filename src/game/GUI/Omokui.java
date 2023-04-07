@@ -130,7 +130,6 @@ public class Omokui{
             super.mouseClicked(e);
             int x = e.getX();
             int y = e.getY();
-            System.out.println(x + " "+ y + " "+ boardpanel.distx+ " "+ boardpanel.disty+" "+x%boardpanel.distx+" "+ y%boardpanel.disty);
             if(((x%boardpanel.distx)-2 <= 10 || (x%boardpanel.distx)+2 >= boardpanel.distx-10) && ((y%boardpanel.disty)-2 <= 10 || (y%boardpanel.disty)+2 >= boardpanel.disty-10)){
                 int[] cords = new int[] {Math.round((float)x/boardpanel.distx)-1, Math.round((float)y/boardpanel.disty)-1};
                 if(boardpanel.field.getboard()[cords[0]][cords[1]]== "*"){
@@ -140,7 +139,6 @@ public class Omokui{
                     l3.setText("player " + (currplauer+1)+ " has won!!!!!!!!");
 
                 } else{
-                System.out.println(boardpanel.field.blockneed[0]+" "+boardpanel.field.blockneed[1]);
                 currplauer=game.getplayer();
                 if(game.players[currplauer] instanceof mplayer){
                     cords=game.players[currplauer].place();
