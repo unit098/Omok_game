@@ -6,6 +6,7 @@ public class board {
     int size;
     String[][] field;
     public int[] blockneed = new int[] {0,0};
+    public int[] aiwin = new int[] {0,0};
     
     public board(String[][] field){
         this.field = field;
@@ -24,11 +25,9 @@ public class board {
     
     /** detects if a placed piece creates a winning row */
     public boolean windetect(int[] lastPlaced){
-        boolean aic= false;
-        if(field[lastPlaced[0]][lastPlaced[1]]=="O"){
-            aic = true;
-        }
+        boolean aic= true;  
         int rowsize = 1;
+        boolean fourrow= false;
         String[] cords = new String[5];
         int lookX = lastPlaced[0];
         int lookY = lastPlaced[1];
@@ -90,6 +89,7 @@ public class board {
             }
 
         }
+        if(rowsize == 4){fourrow=true;}
         rowsize = 1;
         cords = new String[5];
         cords[0] = lastPlaced[0]+" "+lastPlaced[1];
@@ -149,6 +149,7 @@ public class board {
             }
 
         }
+        if(rowsize == 4){fourrow=true;}
         rowsize = 1;
         cords = new String[5];
         cords[0] = lastPlaced[0]+" "+lastPlaced[1];
@@ -213,6 +214,7 @@ public class board {
 
 
         }
+        if(rowsize == 4){fourrow=true;}
         rowsize = 1;
         cords = new String[5];
         cords[0] = lastPlaced[0]+" "+lastPlaced[1];
@@ -277,8 +279,24 @@ public class board {
 
 
         }
+        if(token=="X" && fourrow){
+            aiwin=blockneed;
+        }
         return false;
         
+
+    }
+
+    /** Checks for draw by searching for empty space characters */
+    public boolean isfull(){
+        for(String[] i: field ){
+            for (String j: i){
+                if(j=="*"){
+                    return false;
+                }
+            }
+        }
+        return true;
 
     }
 

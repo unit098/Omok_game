@@ -6,10 +6,12 @@ import game.mplayer;
 import game.omokGame;
 import java.awt.*;
 
+/** GUI for omok game */
 public class Omokui{
     boolean activegame = false;
     omokGame game;
     int currplauer;
+    int size = -11;
     JMenuBar menubar = new JMenuBar();
     JMenu settings_bar = new JMenu("Settings");
     JMenu gamemode = new JMenu("Gamemode");
@@ -23,7 +25,7 @@ public class Omokui{
     JRadioButton mb2 = new JRadioButton("Machine");
     JButton menitem = new JButton("Play");
     JMenuItem menitem2 = new JMenuItem("Play");
-    Bordwidg boardpanel = new Bordwidg();
+    Bordwig boardpanel = new Bordwig();
     JFrame panel = new JFrame("Omok");
     public Omokui(){
     panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,7 +39,6 @@ public class Omokui{
     menitem2.setMnemonic('P');
     menitem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK));
     JToolBar toolbar = new JToolBar("ToolBar");
-    toolbar.setFloatable(true);
     gamemode.add(mb1);
     gamemode.add(mb2);
     settings_bar.add(gamemode);
@@ -79,7 +80,7 @@ public class Omokui{
     Icon icon = new ImageIcon(outimage);
     menitem.setIcon(icon);
     menitem2.setIcon(icon);
-    menitem.setToolTipText("Uhh it plays? bozo");
+    menitem.setToolTipText("Starts a game");
     panel.setVisible(true);
 
 
@@ -144,15 +145,22 @@ public class Omokui{
                     cords=game.players[currplauer].place();
                     if (boardpanel.field.windetect(cords)){
                         activegame=false;
-                        l3.setText("player " + (currplauer+1)+ " has won!!!!!!!!");
-                    }
+                    } else{
                     currplauer=game.getplayer();
+                    }
                 }
                 l3.setText("It is player " + (currplauer+1)+ "'s turn");
+                if(!activegame){
+                    l3.setText("player " + (currplauer+1)+ " has won!!!!!!!!");
+                }
                 }
                 }
             }
             boardpanel.update(boardpanel.getGraphics());
+            if(boardpanel.field.isfull()){
+                activegame=false;
+                l3.setText("Game is a draw");
+            }
         }
         }
     });
@@ -165,9 +173,21 @@ public class Omokui{
     menitem2.addActionListener(playact);
 }
 
+/** Runs to start a new game */
 private void gamestart(){
+    size = -11;
+    while(size <= 14){
+    try {
+        size =Integer.parseInt(JOptionPane.showInputDialog(null, "How big do you want the board (must be greater than 14)"));
+        if(size <=14){
+            JOptionPane.showMessageDialog(null, "Too small");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Incorrect Input, the size could not be read as an int");
+    }
+    }
     if (b1.isSelected()){
-        game = new omokGame(2, 15);
+        game = new omokGame(2, size);
         boardpanel.field = game.gamespace();
         activegame = true;
         boardpanel.update(boardpanel.getGraphics());
@@ -177,7 +197,7 @@ private void gamestart(){
         
     }
     else if (b2.isSelected()){
-        game = new omokGame(1, 15);
+        game = new omokGame(1, size);
         boardpanel.field = game.gamespace();
         activegame = true;
         boardpanel.update(boardpanel.getGraphics());
