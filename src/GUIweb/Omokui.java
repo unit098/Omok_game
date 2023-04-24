@@ -79,6 +79,8 @@ public class Omokui{
     panell.add(panel6);
     panel.setContentPane(panell);
     panel.pack();
+    menubar.add(gamemode);
+    menubar.add(menitem2);
     panel.setJMenuBar(menubar);
     ImageIcon oicon = new ImageIcon("funnymomemnydfsjhfdjasdjl;.png");
     Image image = oicon.getImage();
@@ -94,11 +96,14 @@ public class Omokui{
     ActionListener connact = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+        ButtonGroup sbg = new ButtonGroup();    
+        b2.removeAllItems();
+        b2.update(b2.getGraphics());
         try {
             url = new URL(b1.getText());
             var infourl = new URL(url, "info/");
             URLConnection conn = infourl.openConnection();
-            conn.setConnectTimeout(500);
+            conn.setConnectTimeout(700);
 
             HttpURLConnection httpConn = (HttpURLConnection) conn;
             httpConn.setAllowUserInteraction(false);
@@ -111,7 +116,26 @@ public class Omokui{
                 JSONObject info = new JSONObject(in.readLine());
                 size = (int) info.get("size");
                 for(var i: (JSONArray) (info.get("strategies"))){
-                    b2.addItem((String)i);
+                    String ci = (String)i;
+                    JRadioButton ri = new JRadioButton(ci);
+                    sbg.add(ri);
+                    gamemode.add(ri);
+                    b2.addItem(ci);
+                    ActionListener gsact = new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            ri.setSelected(true);
+                            b2.setSelectedItem(ci);
+                        };
+                    };
+                    ItemListener gsactcb = new ItemListener() {
+                        public void itemStateChanged(ItemEvent e) {
+                            if(b2.getSelectedItem()==ci){
+                                ri.setSelected(true);
+                            }
+                        };
+                    };
+                    b2.addItemListener(gsactcb);
+                    ri.addActionListener(gsact);
                 }
     
             
