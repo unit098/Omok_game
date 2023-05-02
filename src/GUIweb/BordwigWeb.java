@@ -7,13 +7,14 @@ import java.awt.Graphics;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class Bordwig extends javax.swing.JPanel{
+public class BordwigWeb extends javax.swing.JPanel{
     /** Board object that the widget dispalys */
     String[][] field;
     int distx;
     int disty;
+    int size = 0;
 
-    public Bordwig(int size){
+    public BordwigWeb(int size){
         this.field=new String[size][size];
 
     }
@@ -24,7 +25,6 @@ public class Bordwig extends javax.swing.JPanel{
         // TODO Auto-generated method stub
         super.paintComponent(g);
         Dimension d = getSize();
-        int size = 0;
         try {
             size = field.length;
         } catch (Exception e) {
@@ -61,11 +61,29 @@ public class Bordwig extends javax.swing.JPanel{
                     g.setColor(Color.yellow);
                     g.fillOval(distx+(i*distx)-((d.height/(size+3))/2), disty+(j*disty)-((d.height/(size+3))/2), (d.height/(size+3)), (d.height/(size+3)));
                 }
+                if(field[i][j].charAt(0) == 'L'){
+                    g.setColor(Color.white);
+                    g.fillOval(distx+(i*distx)-((d.height/(size+3))/2), disty+(j*disty)-((d.height/(size+3))/2), (d.height/(size+3)), (d.height/(size+3)));
+
+                }
             }
             }
         }
     }
+    public void removeL(){
+        for (int i = 0; i<size; i++){
+            for (int j = 0; j<size; j++){
+                if(field[i][j] == null){}
+                else{
+                if(field[i][j].charAt(0) == 'L'){
+        field[i][j] = String.valueOf(field[i][j].charAt(1));
+                }
+            }
+        }
+        }
+    }
 }
+
     class test{
         JFrame e = new JFrame();
         String [][] b = new String[33][33];
@@ -76,7 +94,7 @@ public class Bordwig extends javax.swing.JPanel{
             c.add(new JTextField("Well"));
             e.setLayout(new BorderLayout());
             e.add(c, BorderLayout.NORTH);
-            e.add(new Bordwig(15), BorderLayout.CENTER);
+            e.add(new BordwigWeb(15), BorderLayout.CENTER);
             e.setVisible(true);
         }
     public static void main(String[] args) {

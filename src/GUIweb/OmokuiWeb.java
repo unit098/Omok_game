@@ -17,12 +17,14 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.awt.*;
 
 /** GUI for omok game */
-public class Omokui{
+public class OmokuiWeb{
+    WebConn web = new WebConn(this);
     boolean activegame = false;
-    URL url;
+    String url;
     int currplauer;
     int size = -11;
     String pid;
@@ -37,10 +39,10 @@ public class Omokui{
     JLabel l3 = new JLabel(" ");
     JButton menitem = new JButton("Play");
     JMenuItem menitem2 = new JMenuItem("Play");
-    Bordwig boardpanel = new Bordwig(0);
+    BordwigWeb boardpanel = new BordwigWeb(0);
     JFrame panel = new JFrame("Omok");
 
-    public Omokui(){
+    public OmokuiWeb(){
     b1.setColumns(18);
     panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     var panell = new JPanel();
@@ -96,26 +98,15 @@ public class Omokui{
     ActionListener connact = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+        if (!activegame){
         ButtonGroup sbg = new ButtonGroup();    
         b2.removeAllItems();
+        gamemode.removeAll();
         b2.update(b2.getGraphics());
-        try {
-            url = new URL(b1.getText());
-            var infourl = new URL(url, "info/");
-            URLConnection conn = infourl.openConnection();
-            conn.setConnectTimeout(700);
-
-            HttpURLConnection httpConn = (HttpURLConnection) conn;
-            httpConn.setAllowUserInteraction(false);
-            httpConn.setInstanceFollowRedirects(true);
-            httpConn.setRequestMethod("GET");
-            httpConn.connect();
-            if (HttpURLConnection.HTTP_OK == httpConn.getResponseCode()) {
-                var is = httpConn.getInputStream();
-                var in = new BufferedReader(new InputStreamReader(is));
-                JSONObject info = new JSONObject(in.readLine());
-                size = (int) info.get("size");
-                for(var i: (JSONArray) (info.get("strategies"))){
+            url = b1.getText();
+            JSONObject info = web.info(url);
+            size = (int) info.get("size");
+            for(var i: (JSONArray) (info.get("strategies"))){
                     String ci = (String)i;
                     JRadioButton ri = new JRadioButton(ci);
                     sbg.add(ri);
@@ -137,19 +128,8 @@ public class Omokui{
                     b2.addItemListener(gsactcb);
                     ri.addActionListener(gsact);
                 }
-    
-            
-                in.close();
-            }
-            
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            JOptionPane.showMessageDialog(null, "Bad URL");
-            url=null;
-            b2.removeAllItems();
-            b2.update(b2.getGraphics());
-        }
     }
+}
     };
     ActionListener playact = new ActionListener() {
 
@@ -174,22 +154,11 @@ public class Omokui{
             super.mouseClicked(e);
             int x = e.getX();
             int y = e.getY();
-            try {
                 if(((x%boardpanel.distx)-2 <= 10 || (x%boardpanel.distx)+2 >= boardpanel.distx-10) && ((y%boardpanel.disty)-2 <= 10 || (y%boardpanel.disty)+2 >= boardpanel.disty-10)){
-                    int[] cords = new int[] {Math.round((float)x/boardpanel.distx)-1, Math.round((float)y/boardpanel.disty)-1};
-                    URL purl = new URL(url, "play/?pid="+pid+"&x="+cords[0]+"&y="+cords[1]);
-                    URLConnection conn = purl.openConnection();
-
-                    HttpURLConnection httpConn = (HttpURLConnection) conn;
-                    httpConn.setAllowUserInteraction(false);
-                    httpConn.setInstanceFollowRedirects(true);
-                    httpConn.setRequestMethod("GET");
-                    httpConn.connect();
-                    if (HttpURLConnection.HTTP_OK == httpConn.getResponseCode()) {
-                        var is = httpConn.getInputStream();
-                        var in = new BufferedReader(new InputStreamReader(is));
-                        JSONObject info = new JSONObject(in.readLine());
+                int[] cords = new int[] {Math.round((float)x/boardpanel.distx)-1, Math.round((float)y/boardpanel.disty)-1};
+                JSONObject info = web.play(url, pid, cords);
                         if ((boolean) info.get("response")){
+                            boardpanel.removeL();
                             JSONObject playmove = (JSONObject)info.get("ack_move");
                             boardpanel.field[(int)playmove.get("x")][(int)playmove.get("y")]="O";
                             if((Boolean)playmove.get("isWin")){
@@ -206,7 +175,7 @@ public class Omokui{
 
                             } else{
                                 JSONObject commove = (JSONObject)info.get("move");
-                                boardpanel.field[(int)commove.get("x")][(int)commove.get("y")]="X";
+                                boardpanel.field[(int)commove.get("x")][(int)commove.get("y")]="LX";
                             if((Boolean)commove.get("isWin")){
                                 JSONArray wincords = (JSONArray)commove.get("row");
                                 for(int i =0; i<wincords.length(); i+=2){
@@ -227,12 +196,7 @@ public class Omokui{
                     }
                     
                 }
-            } catch (JSONException | IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
             boardpanel.update(boardpanel.getGraphics());
-        }
         }
     });
     b3.addActionListener(playact);
@@ -243,51 +207,23 @@ public class Omokui{
 
 /** Runs to start a new game */
 private void gamestart(){
-    try {
         if(url==null){
         }
         else{
+        l3.setText("");
         activegame = true;
-        URL gsurl;
-        try {
-            gsurl = new URL(url, "new/?strategy="+b2.getSelectedItem());
-            URLConnection conn = gsurl.openConnection();
-
-            HttpURLConnection httpConn = (HttpURLConnection) conn;
-            httpConn.setAllowUserInteraction(false);
-            httpConn.setInstanceFollowRedirects(true);
-            httpConn.setRequestMethod("GET");
-            httpConn.connect();
-            if (HttpURLConnection.HTTP_OK == httpConn.getResponseCode()) {
-                var is = httpConn.getInputStream();
-                var in = new BufferedReader(new InputStreamReader(is));
-                JSONObject info = new JSONObject(in.readLine());
-                pid = (String) info.get("pid");
-            }
-            boardpanel.field=new String[size][size];
-
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        }
-    } catch (ProtocolException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    } catch (JSONException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
+        JSONObject info = web.Game(url);
+        pid = (String) info.get("pid");
+    boardpanel.field=new String[size][size];
     boardpanel.update(boardpanel.getGraphics());
 }
+    }
+    
 
         
     
     public static void main(String[] args) {
-       new Omokui();
+       new OmokuiWeb();
 
     }
 }
